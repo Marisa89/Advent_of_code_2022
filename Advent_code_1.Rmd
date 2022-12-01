@@ -1,0 +1,31 @@
+---
+title: "Untitled"
+date: "12/1/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_knit$set(root.dir = '~/Dropbox/Advent_code/1/')
+```
+
+```{r}
+library(dplyr)
+library(tidyr)
+input<-read.csv("ac_1_1", header = FALSE, blank.lines.skip = FALSE)
+input2<-as.data.frame(t(input))
+write.table(input2, "ac_1_1_t", quote = FALSE, col.names = F, row.names = FALSE)
+```
+
+```{bash}
+cat ac_1_1_t|sed 's/NA /|/g' |tr '|' '\n' > ac_1_1_multi
+```
+
+```{r}
+input2<-read.csv("ac_1_1_multi", header = FALSE, sep = " ")
+row.names(input2)<- paste0("Elf", c(1:nrow(input2)))
+input2$calories_total<-rowSums(input2,na.rm=TRUE)
+ordered_input<-input2[order(-input2$calories_total),] 
+ordered_input[1,]
+sum(ordered_input$calories_total[1:3])
+```
